@@ -1,0 +1,95 @@
+/** Created by raghumdani
+    19/02/2015, 19:30
+**/
+
+#ifndef _BIGINTEGER_
+
+#define _BIGINTEGER_
+#include <string>
+#include <algorithm>
+using namespace std;
+
+namespace big_int {
+	class big_integer {
+		string str;
+		public:
+		//constructors
+		big_integer() {}
+		big_integer(string s) {
+			str = s;
+		}
+		//useful methods	
+		big_integer add(big_integer);
+		string operator+(big_integer);
+		void operator+=(big_integer);
+		//big_integer add(char* a);
+		//big_integer multiply(big_integer);
+		//big_integer multiply(char* a);
+		string to_string();
+	};
+	/** converts big_integer to string
+	**/
+	string big_integer::to_string() {
+		return str;
+	}
+	/**
+	   adds two big integers and returns the ans
+	**/
+	big_integer big_integer::add(big_integer b1) {
+		string s2 = b1.to_string();
+		string ans;
+		if(str.size()<s2.size()) {
+			int n = s2.size() - str.size();
+			for(int i=0;i<n;++i) {
+				str.insert(str.begin(),'0');
+			}
+		}
+		else if(str.size()>s2.size()) {
+			int n = str.size()-s2.size();
+			for(int i = 0;i<n;++i) {
+				s2.insert(s2.begin(),'0');
+			}
+		}
+		int carry = 0;
+		for(int i = int(str.size())-1;i>=0;--i) {
+			if(carry+str[i]-'0'+s2[i]-'0'>=10) {
+				ans.insert(ans.begin(),(carry+str[i]-'0'+s2[i]-'0')%10+'0');
+				carry = (carry+str[i]-'0'+s2[i]-'0')/10;
+			}
+			else {
+			    ans.insert(ans.begin(),carry+str[i]+s2[i]-'0');
+			    carry = (carry+str[i]-'0'+s2[i]-'0')/10;
+			}
+		}
+		if(carry!=0) {
+			ans.insert(ans.begin(),carry+'0');
+		}
+		return big_integer(ans);
+	}
+	/**
+	   operator '+' for big_integer operations
+	**/
+	string big_integer::operator+(big_integer b1) {
+		big_integer ans = add(b1);
+		return ans.to_string();
+	}
+	/** 
+	   operator '+=' for adding big integers
+	**/
+	void big_integer::operator+= (big_integer b1) {
+		this->str = add(b1).str;
+	}
+};
+#endif
+
+/** tester main method
+    to be removed after completion 
+    of project **/
+#include <bits/stdc++.h>
+using namespace std;
+using namespace big_int;
+int main()
+{
+
+	return 0;
+}
